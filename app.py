@@ -5,7 +5,7 @@ import uuid
 import os
 
 app = Flask(__name__)
-UPLOAD_FOLDER = os.path.join(app.root_path, 'upload')
+UPLOAD_FOLDER = './static'
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PRIVATE_KEY'] = os.environ.get('PRIVATE_KEY', keys.private_key)
@@ -30,7 +30,7 @@ def upload_image():
     })
 
 
-@app.route('/get/<string:image_uuid>/<string:token>', methods=['GET'])
+@app.route('/image/<string:image_uuid>/<string:token>', methods=['GET'])
 def get_image(image_uuid, token):
     if not utils.check_if_file_exists(image_uuid):
         abort(404)

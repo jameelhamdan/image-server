@@ -48,15 +48,15 @@ def upload_file(request, new_file_name):
             raise ValidationError('No selected file')
 
         if file and allowed_file(file.filename):
-            file_ext = get_file_extenstion(file.filename)
-            file_name = '{}.{}'.format(new_file_name, file_ext)
-            final_name = '{}.png'.format(new_file_name)
+            file_name = '{}.png'.format(new_file_name)
+            file.filename = file_name
 
-            file.save(upload_path)
+            file_path = os.path.join(upload_path, file_name)
+            file.save(file_path)
 
-            Image.open(os.path.join(upload_path, file_name)).save(os.path.join(upload_path, final_name))
+            Image.open(file_path).save(file_path)
 
-            return final_name
+            return file_name
 
         elif not allowed_file(file.filename):
             raise ValidationError('File extension not allowed')
