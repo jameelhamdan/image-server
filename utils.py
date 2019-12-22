@@ -4,6 +4,7 @@ from PIL import Image
 import os
 import jwt
 
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
@@ -73,18 +74,19 @@ def check_if_file_exists(uuid):
     return os.path.isfile(file_path)
 
 
-def verify_token(token, original_uuid):
-    public_key = app.config['PUBLIC_KEY']
+def verify_token(token):
+    secret_key = app.config['SECRET_KEY']
 
     # Must be encoded with private key and decoded with public key
     try:
-        decoded_token = jwt.decode(token, public_key, algorithms=['RS256'])
+        decoded_token = jwt.decode(token, secret_key, algorithms=['HS256', ])
         try:
             token_uuid = decoded_token['uuid']
 
         except KeyError:
             return False
 
-        return token_uuid == original_uuid
+        return token_uuid
+
     except jwt.exceptions.PyJWTError as e:
         return False
