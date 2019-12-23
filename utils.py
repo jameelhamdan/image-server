@@ -75,10 +75,11 @@ def check_if_file_exists(uuid):
 
 
 def verify_token(token):
+    
     secret_key = app.config['SECRET_KEY']
-
-    # Must be encoded with private key and decoded with public key
+    
     try:
+        # Must be encoded with same secret key defined in settings
         decoded_token = jwt.decode(token, secret_key, algorithms=['HS256', ])
         try:
             token_uuid = decoded_token['uuid']
